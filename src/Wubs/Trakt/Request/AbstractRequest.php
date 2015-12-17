@@ -8,19 +8,17 @@
 
 namespace Wubs\Trakt\Request;
 
-use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\ServerException;
-use GuzzleHttp\Message\ResponseInterface;
 use Illuminate\Support\Collection;
 use League\OAuth2\Client\Token\AccessToken;
+use Psr\Http\Message\ResponseInterface;
 use Wubs\Trakt\Contracts\ResponseHandler;
 use Wubs\Trakt\Request\Exception\HttpCodeException\ExceptionStatusCodeFactory;
 use Wubs\Trakt\Response\Handlers\AbstractResponseHandler;
 use Wubs\Trakt\Response\Handlers\DefaultResponseHandler;
 
-abstract class AbstractRequest
-{
+abstract class AbstractRequest {
     /**
      * @var string
      */
@@ -52,8 +50,7 @@ abstract class AbstractRequest
     /**
      *
      */
-    public function __construct()
-    {
+    public function __construct() {
         $this->queryParams = new Collection();
 
         $this->setResponseHandler(new DefaultResponseHandler());
@@ -62,18 +59,15 @@ abstract class AbstractRequest
     /**
      * @param $clientId
      */
-    public function setClientId($clientId)
-    {
-        if (!is_null($clientId)) {
+    public function setClientId($clientId) {
+        if (!is_null($clientId))
             $this->clientId = $clientId;
-        }
     }
 
     /**
      * @param AccessToken $token
      */
-    public function setToken(AccessToken $token = null)
-    {
+    public function setToken(AccessToken $token = null) {
         $this->token = $token;
     }
 
@@ -81,28 +75,26 @@ abstract class AbstractRequest
      * @param $level
      * @return $this
      */
-    public function setExtended($level)
-    {
+    public function setExtended($level) {
         $this->addQueryParam("extended", $level);
+
         return $this;
     }
 
     /**
      * @return mixed
      */
-    public function getExtended()
-    {
+    public function getExtended() {
         return $this->extended;
     }
-
 
     /**
      * @param int $page
      * @return AbstractRequest
      */
-    public function setPage($page)
-    {
+    public function setPage($page) {
         $this->addQueryParam('page', $page);
+
         return $this;
     }
 
@@ -110,15 +102,15 @@ abstract class AbstractRequest
      * @param int $limit
      * @return AbstractRequest
      */
-    public function setLimit($limit)
-    {
+    public function setLimit($limit) {
         $this->addQueryParam('limit', $limit);
+
         return $this;
     }
 
-    public function addQueryParam($key, $value)
-    {
+    public function addQueryParam($key, $value) {
         $this->queryParams->put($key, $value);
+
         return $this;
     }
 
@@ -126,15 +118,16 @@ abstract class AbstractRequest
      * @param array $params
      * @return $this
      */
-    public function setQueryParams($params)
-    {
+    public function setQueryParams($params) {
         if (is_array($params)) {
             $this->queryParams = collect($params);
+
             return $this;
         }
 
         if ($params instanceof Collection) {
             $this->queryParams = $params;
+
             return $this;
         }
 
@@ -151,15 +144,11 @@ abstract class AbstractRequest
      * @throws Exception\HttpCodeException\ServerUnavailableException
      * @throws Exception\HttpCodeException\StatusCodeException
      */
-    public function make($clientId, ClientInterface $client, ResponseHandler $responseHandler = null)
-    {
+    public function make($clientId, ClientInterface $client, ResponseHandler $responseHandler = null) {
         $this->setResponseHandler($responseHandler);
-
         $this->setClientId($clientId);
 
-        $request = $this->createRequest($client);
-
-        $response = $this->send($client, $request);
+        $response = $client->request($this->getRequestType(), $this->getUrl(), $this->getOptions());
 
         if ($this->notSuccessful($response)) {
             throw ExceptionStatusCodeFactory::create($response->getStatusCode());
@@ -168,24 +157,20 @@ abstract class AbstractRequest
         return $this->handleResponse($response, $client);
     }
 
-    public function getUrl()
-    {
+    public function getUrl() {
         return UriBuilder::format($this);
     }
 
     /**
      * @param ResponseHandler $responseHandler
      */
-    public function setResponseHandler(ResponseHandler $responseHandler = null)
-    {
-        if ($responseHandler) {
+    public function setResponseHandler(ResponseHandler $responseHandler = null) {
+        if ($responseHandler)
             $this->responseHandler = $responseHandler;
-        }
     }
 
 
-    protected function handleResponse(ResponseInterface $response, ClientInterface $client)
-    {
+    protected function handleResponse(ResponseInterface $response, ClientInterface $client) {
         $handler = $this->getResponseHandler();
 
         $handler->setClientId($this->clientId);
@@ -197,21 +182,18 @@ abstract class AbstractRequest
     /**
      * @return ResponseHandler
      */
-    public function getResponseHandler()
-    {
+    public function getResponseHandler() {
         return $this->responseHandler;
     }
 
-    protected function getPostBody()
-    {
+    protected function getPostBody() {
         return [];
     }
 
     /**
      * @return array
      */
-    private function getOptions()
-    {
+    private function getOptions() {
         $options = [
             "headers" => $this->getHeaders(),
             "query" => $this->queryParams->toArray()
@@ -223,8 +205,7 @@ abstract class AbstractRequest
     /**
      * @return array
      */
-    private function getHeaders()
-    {
+    private function getHeaders() {
         $token = (is_null($this->token)) ? "" : "Bearer " . $this->token;
         return [
             "content-type" => "application/json",
@@ -234,8 +215,7 @@ abstract class AbstractRequest
         ];
     }
 
-    private function notSuccessful(ResponseInterface $response)
-    {
+    private function notSuccessful(ResponseInterface $response) {
         return (!in_array($response->getStatusCode(), [200, 201, 204, 504]));
     }
 
@@ -243,8 +223,7 @@ abstract class AbstractRequest
      * @param $options
      * @return mixed
      */
-    private function setBody($options)
-    {
+    private function setBody($options) {
         if ($this->needsPostBody()) {
             $options['body'] = json_encode($this->getPostBody());
             return $options;
@@ -253,42 +232,10 @@ abstract class AbstractRequest
         return $options;
     }
 
-    private function needsPostBody()
-    {
+    private function needsPostBody() {
         return in_array($this->getRequestType(), [RequestType::PUT, RequestType::POST]);
     }
 
-    /**
-     * @param ClientInterface $client
-     * @param $request
-     * @return ResponseInterface|null
-     */
-    private function send(ClientInterface $client, $request)
-    {
-        try {
-            $response = $client->send($request);
-            return $response;
-        } catch (ServerException $exception) {
-            $response = $exception->getResponse();
-            return $response;
-        }
-    }
-
-    /**
-     * @param ClientInterface $client
-     * @return \GuzzleHttp\Message\RequestInterface
-     */
-    private function createRequest(ClientInterface $client)
-    {
-        $request = $client->createRequest(
-            $this->getRequestType(),
-            $this->getUrl(),
-            $this->getOptions()
-        );
-        return $request;
-    }
-
     abstract public function getRequestType();
-
     abstract public function getUri();
 }
