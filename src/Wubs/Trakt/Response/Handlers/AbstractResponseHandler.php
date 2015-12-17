@@ -1,17 +1,10 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: bwubs
- * Date: 15/03/15
- * Time: 17:42
- */
 
 namespace Wubs\Trakt\Response\Handlers;
 
-
 use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Message\ResponseInterface;
 use League\OAuth2\Client\Token\AccessToken;
+use Psr\Http\Message\ResponseInterface;
 
 class AbstractResponseHandler
 {
@@ -59,7 +52,7 @@ class AbstractResponseHandler
 
     protected function getJson(ResponseInterface $response)
     {
-        return $response->json(["object" => true]);
+        return json_decode($response->getBody());
     }
 
     protected function transformToObjects(ResponseInterface $response, $objectName, ClientInterface $client)

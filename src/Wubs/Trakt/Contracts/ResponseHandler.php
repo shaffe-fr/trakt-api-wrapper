@@ -1,8 +1,8 @@
 <?php namespace Wubs\Trakt\Contracts;
 
-use GuzzleHttp\Message\ResponseInterface;
+use GuzzleHttp\ClientInterface;
 use League\OAuth2\Client\Token\AccessToken;
-
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * Created by PhpStorm.
@@ -10,11 +10,8 @@ use League\OAuth2\Client\Token\AccessToken;
  * Date: 25/02/15
  * Time: 17:24
  */
-interface ResponseHandler
-{
-    public function handle(ResponseInterface $response, \GuzzleHttp\ClientInterface $client);
-
+interface ResponseHandler  {
+    public function handle(ResponseInterface $response, ClientInterface $client);
     public function setClientId($id);
-
     public function setToken(AccessToken $token);
 }

@@ -1,24 +1,16 @@
 <?php
 
-
 namespace Wubs\Trakt;
-
 
 use GuzzleHttp\Client;
 
-class TraktHttpClient
-{
-
+class TraktHttpClient  {
+    const API_SCHEME = 'https';
     const API_URL = 'api-v2launch.trakt.tv';
 
-    const API_VERSION = 2;
-
-    const API_SCHEME = 'https';
-
-    public static function make()
-    {
-        $host = static::API_URL;
-
-        return new Client(['base_url' => [static::API_SCHEME . '://' . $host, ['version' => static::API_VERSION]]]);
+    public static function make() {
+        return new Client(array(
+            'base_uri' => self::API_SCHEME . '://' . self::API_URL
+        ));
     }
 }
