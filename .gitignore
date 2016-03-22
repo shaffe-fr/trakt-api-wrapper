@@ -7,4 +7,6 @@ tests.txt
 .env
 _site
 composer.phar
+composer.lock
 vendor/
+examples/
