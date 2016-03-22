@@ -123,6 +123,6 @@ abstract class Endpoint
     {
         $match = [];
         preg_match('/(?<=@var\s).+/', $dockBlock, $match);
-        return new \ReflectionClass($match[0]);
+        return new \ReflectionClass(trim($match[0]));
     }
 }
