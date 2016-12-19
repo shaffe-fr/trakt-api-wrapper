@@ -1,5 +1,5 @@
 {
-  "name": "vgot/trakt",
+  "name": "wubs/trakt",
   "description": "Trakt API wrapper",
   "authors": [
     {
@@ -27,7 +27,7 @@
   },
   "autoload": {
     "psr-0": {
-      "Wubs": "src/"
+      "Wubs\\Trakt": "src/"
     },
     "classmap": [
       "tests"
