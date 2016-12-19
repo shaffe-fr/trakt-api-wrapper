@@ -112,6 +112,11 @@ class Shows extends Endpoint {
     {
         return $this->request(new WatchingRequest($mediaId));
     }
+	
+        public function next($mediaId)
+    {
+        return $this->request(new NextEpisodeRequest($mediaId));
+    }
 
 }
 
