@@ -13,11 +13,11 @@ class Get extends AbstractRequest
     /**
      * @var
      */
-    private $id;
+    public $id;
     /**
      * @var
      */
-    private $type;
+    public $type;
 
     /**
      * @param AccessToken $token

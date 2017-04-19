@@ -6,7 +6,7 @@ use GuzzleHttp\Client;
 
 class TraktHttpClient  {
     const API_SCHEME = 'https';
-    const API_URL = 'api-v2launch.trakt.tv';
+    const API_URL = 'api.trakt.tv';
 
     public static function make() {
         return new Client(array(
