@@ -9,6 +9,7 @@
 */
 namespace Wubs\Trakt\Api;
 
+use Wubs\Trakt\Request\Comments\CommentSize;
 use Wubs\Trakt\Media\Media;
 use Wubs\Trakt\Request\Comments\Create as CreateRequest;
 use League\OAuth2\Client\Token\AccessToken;
@@ -25,7 +26,12 @@ class Comments extends Endpoint {
     */
     public $like;
 
-    public function create(Media $media, $comment, $spoiler = false)
+    public function commentSize()
+    {
+        return $this->request(new CommentSizeRequest());
+    }
+
+	public function create(Media $media, $comment, $spoiler = false)
     {
         return $this->request(new CreateRequest($media, $comment, $spoiler));
     }

@@ -71,6 +71,14 @@ abstract class Endpoint
     {
         return $this->extend("episodes");
     }
+
+    /**
+     * @return $this
+     */
+    public function withMetadata()
+    {
+        return $this->extend("metadata");
+    }
     
     /**
      * @param mixed $page

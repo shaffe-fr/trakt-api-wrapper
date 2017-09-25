@@ -10,6 +10,7 @@
 namespace Wubs\Trakt\Api;
 
 use Wubs\Trakt\Request\Episodes\Comments as CommentsRequest;
+use Wubs\Trakt\Request\Episodes\EpisodeTrait;
 use Wubs\Trakt\Request\Episodes\Ratings as RatingsRequest;
 use Wubs\Trakt\Request\Episodes\Stats as StatsRequest;
 use Wubs\Trakt\Request\Episodes\Summary as SummaryRequest;
@@ -22,6 +23,11 @@ class Episodes extends Endpoint {
     public function comments($showId, $season, $episode)
     {
         return $this->request(new CommentsRequest($showId, $season, $episode));
+    }
+
+	public function episodeTrait()
+    {
+        return $this->request(new EpisodeTraitRequest());
     }
 
 	public function ratings($mediaId, $season, $episode)

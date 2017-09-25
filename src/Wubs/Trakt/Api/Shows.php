@@ -12,6 +12,7 @@ namespace Wubs\Trakt\Api;
 use Wubs\Trakt\Request\Shows\Aliases as AliasesRequest;
 use Wubs\Trakt\Request\Shows\Collected as CollectedRequest;
 use Wubs\Trakt\Request\Shows\Comments as CommentsRequest;
+use Wubs\Trakt\Request\Shows\NextEpisode as NextEpisodeRequest;
 use Wubs\Trakt\Request\Shows\People as PeopleRequest;
 use Wubs\Trakt\Request\Shows\Played as PlayedRequest;
 use Wubs\Trakt\Request\Shows\Popular as PopularRequest;
@@ -46,6 +47,11 @@ class Shows extends Endpoint {
 	public function comments($mediaId)
     {
         return $this->request(new CommentsRequest($mediaId));
+    }
+
+	public function nextEpisode($mediaId)
+    {
+        return $this->request(new NextEpisodeRequest($mediaId));
     }
 
 	public function people($mediaId)
@@ -111,11 +117,6 @@ class Shows extends Endpoint {
 	public function watching($mediaId)
     {
         return $this->request(new WatchingRequest($mediaId));
-    }
-	
-        public function next($mediaId)
-    {
-        return $this->request(new NextEpisodeRequest($mediaId));
     }
 
 }
