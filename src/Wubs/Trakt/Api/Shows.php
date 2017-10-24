@@ -10,6 +10,7 @@
 namespace Wubs\Trakt\Api;
 
 use Wubs\Trakt\Request\Shows\Aliases as AliasesRequest;
+use Wubs\Trakt\Request\Shows\Anticipated as AnticipatedRequest;
 use Wubs\Trakt\Request\Shows\Collected as CollectedRequest;
 use Wubs\Trakt\Request\Shows\Comments as CommentsRequest;
 use Wubs\Trakt\Request\Shows\NextEpisode as NextEpisodeRequest;
@@ -37,6 +38,11 @@ class Shows extends Endpoint {
     public function aliases($mediaId)
     {
         return $this->request(new AliasesRequest($mediaId));
+    }
+
+	public function anticipated()
+    {
+        return $this->request(new AnticipatedRequest());
     }
 
 	public function collected($period = null)

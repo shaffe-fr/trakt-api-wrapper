@@ -10,6 +10,7 @@
 namespace Wubs\Trakt\Api;
 
 use Wubs\Trakt\Request\Movies\Aliases as AliasesRequest;
+use Wubs\Trakt\Request\Movies\Anticipated as AnticipatedRequest;
 use Wubs\Trakt\Request\Movies\Collected as CollectedRequest;
 use Wubs\Trakt\Request\Movies\Comments as CommentsRequest;
 use Wubs\Trakt\Request\Movies\People as PeopleRequest;
@@ -33,6 +34,11 @@ class Movies extends Endpoint {
     public function aliases($mediaId)
     {
         return $this->request(new AliasesRequest($mediaId));
+    }
+
+	public function anticipated()
+    {
+        return $this->request(new AnticipatedRequest());
     }
 
 	public function collected($period = null)
