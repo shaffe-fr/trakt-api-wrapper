@@ -5,7 +5,17 @@ This is the Trakt API wrapper for their new API (version 2). It's in active deve
 
 ## Installation
 
-In your composer.json file add:`"wubs/trakt": "~2.0"` and run `composer install`
+In your composer.json file add:
+
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/shaffe-fr/trakt-api-wrapper"
+        }
+    ]
+
+and run `composer install shaffe-fr/trakt`.
+
 
 ## The goal
 
@@ -13,7 +23,8 @@ The goal of this wrapper is to make communicating with the Trakt api easier. It 
 
 ## Laravel usage
 
-To use the wrapper inside Laravel, you only have to add 
+Provider and facade will be automatically discovered with Laravel 5.5+.
+You can also add 
 `Wubs\Trakt\Providers\Laravel\TraktApiServiceProvider::class` to the `providers` array in your `config/app.php` file.
  When you've done this, use the `\Wubs\Trakt\Trakt` class as a type hint to inject it into routes or methods. See 
  here an example:
